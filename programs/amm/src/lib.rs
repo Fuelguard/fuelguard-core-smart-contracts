@@ -10,17 +10,17 @@ use instructions::*;
 use states::*;
 use util::access_control::*;
 
-#[cfg(feature = "devnet")]
-declare_id!("9zS3bVMEPTnFSdPGyr69YHrjkF3hL5xByAMvrNm3n3Tj");
+//#[cfg(feature = "devnet")]
+//declare_id!("9zS3bVMEPTnFSdPGyr69YHrjkF3hL5xByAMvrNm3n3Tj");
 #[cfg(not(feature = "devnet"))]
-declare_id!("CAMMCzo5YL8w4VFF8KVHrK22GGUsp5VTaW7grrKgrWqK");
+declare_id!("9zS3bVMEPTnFSdPGyr69YHrjkF3hL5xByAMvrNm3n3Tj");
 
 pub mod admin {
     use anchor_lang::prelude::declare_id;
-    #[cfg(feature = "devnet")]
-    declare_id!("adMCyoCgfkg7bQiJ9aBJ59H3BXLY3r5LNLfPpQfMzBe");
+    //#[cfg(feature = "devnet")]
+    //declare_id!("adMCyoCgfkg7bQiJ9aBJ59H3BXLY3r5LNLfPpQfMzBe");
     #[cfg(not(feature = "devnet"))]
-    declare_id!("GThUX1Atko4tqhN2NaiTazWSeFWMuiUvfFnyJyUghFMJ");
+    declare_id!("Gy9Gs238x3dN4Kgg95oiNCbLkmSXcmQAxm4EjqgfGxGU");
 }
 
 #[program]

@@ -56,7 +56,7 @@ pub struct ClientConfig {
     http_url: String,
     ws_url: String,
     payer_path: String,
-    admin_path: String,
+    //admin_path: String,
     solforex_v3_program: Pubkey,
     slippage: f64,
     amm_config_key: Pubkey,
@@ -93,10 +93,10 @@ fn load_cfg(client_config: &String) -> Result<ClientConfig> {
     if payer_path.is_empty() {
         panic!("payer_path must not be empty");
     }
-    let admin_path = config.get("Global", "admin_path").unwrap();
-    if admin_path.is_empty() {
-        panic!("admin_path must not be empty");
-    }
+    //let admin_path = config.get("Global", "admin_path").unwrap();
+    //if admin_path.is_empty() {
+    //    panic!("admin_path must not be empty");
+    //}
 
     let solforex_v3_program_str = config.get("Global", "solforex_v3_program").unwrap();
     if solforex_v3_program_str.is_empty() {
@@ -165,7 +165,7 @@ fn load_cfg(client_config: &String) -> Result<ClientConfig> {
         http_url,
         ws_url,
         payer_path,
-        admin_path,
+        //admin_path,
         solforex_v3_program,
         slippage,
         amm_config_key,
@@ -527,7 +527,7 @@ fn main() -> Result<()> {
     let pool_config = load_cfg(&client_config.to_string()).unwrap();
     // Admin and cluster params.
     let payer = read_keypair_file(&pool_config.payer_path)?;
-    let admin = read_keypair_file(&pool_config.admin_path)?;
+    //let admin = read_keypair_file(&pool_config.admin_path)?;
     // solana rpc client
     let rpc_client = RpcClient::new(pool_config.http_url.to_string());
 
@@ -746,7 +746,7 @@ fn main() -> Result<()> {
                 fund_fee_rate,
             )?;
             // send
-            let signers = vec![&payer, &admin];
+            let signers = vec![&payer];//, &admin
             let recent_hash = rpc_client.get_latest_blockhash()?;
             let txn = Transaction::new_signed_with_payer(
                 &create_instr,
@@ -795,7 +795,7 @@ fn main() -> Result<()> {
                 update_value,
             )?;
             // send
-            let signers = vec![&payer, &admin];
+            let signers = vec![&payer];//, &admin
             let recent_hash = rpc_client.get_latest_blockhash()?;
             let txn = Transaction::new_signed_with_payer(
                 &update_amm_config_instr,
@@ -809,7 +809,7 @@ fn main() -> Result<()> {
         CommandsName::CreateOperation => {
             let create_instr = create_operation_account_instr(&pool_config.clone())?;
             // send
-            let signers = vec![&payer, &admin];
+            let signers = vec![&payer]; //, &admin
             let recent_hash = rpc_client.get_latest_blockhash()?;
             let txn = Transaction::new_signed_with_payer(
                 &create_instr,
@@ -823,7 +823,7 @@ fn main() -> Result<()> {
         CommandsName::UpdateOperation { param, keys } => {
             let create_instr = update_operation_account_instr(&pool_config.clone(), param, keys)?;
             // send
-            let signers = vec![&payer, &admin];
+            let signers = vec![&payer];//, &admin
             let recent_hash = rpc_client.get_latest_blockhash()?;
             let txn = Transaction::new_signed_with_payer(
                 &create_instr,
@@ -931,7 +931,7 @@ fn main() -> Result<()> {
                 &program.id(),
             )
             .0;
-            let user_reward_token = get_associated_token_address(&admin.pubkey(), &reward_mint);
+            let user_reward_token = get_associated_token_address(&payer.pubkey(), &reward_mint);
             let create_instr = initialize_reward_instr(
                 &pool_config.clone(),
                 pool_config.pool_id_account.unwrap(),
@@ -946,7 +946,7 @@ fn main() -> Result<()> {
                 emissions_per_second_x64,
             )?;
             // send
-            let signers = vec![&payer, &admin];
+            let signers = vec![&payer];//, &admin
             let recent_hash = rpc_client.get_latest_blockhash()?;
             let txn = Transaction::new_signed_with_payer(
                 &create_instr,
@@ -999,7 +999,7 @@ fn main() -> Result<()> {
                 emissions_per_second_x64,
             )?;
             // send
-            let signers = vec![&payer, &admin];
+            let signers = vec![&payer];//, &admin
             let recent_hash = rpc_client.get_latest_blockhash()?;
             let txn = Transaction::new_signed_with_payer(
                 &create_instr,
@@ -1030,7 +1030,7 @@ fn main() -> Result<()> {
                 println!("raw_data:{:?}", raw_data);
             } else {
                 // send
-                let signers = vec![&payer, &admin];
+                let signers = vec![&payer];//, &admin
                 let recent_hash = rpc_client.get_latest_blockhash()?;
                 let txn = Transaction::new_signed_with_payer(
                     &transfer_reward_owner_instrs,
